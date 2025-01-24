@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import ApolloWrapper from "./common/graphql/apollo-wrapper";
+import ApolloWrapper from "@/app/common/graphql/apollo-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "Home",
+  title: "SignIn",
+  description: "SignIn",
 };
 
 export default function RootLayout({
