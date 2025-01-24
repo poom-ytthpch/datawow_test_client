@@ -133,14 +133,14 @@ const CustomContent = ({ edit, userId }: Props) => {
                   return post;
                 }
               })
-              .map((post, index) => (
+              .map((post, index , pps) => (
                 <CustomCard
                   edit={edit}
                   key={index}
                   search={search}
                   post={post}
                   index={index}
-                  post_count={posts.length}
+                  post_count={pps.length}
                   handleGetAuthorPosts={handleGetAuthorPosts}
                 />
               ))

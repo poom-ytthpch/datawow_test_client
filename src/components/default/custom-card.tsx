@@ -94,7 +94,12 @@ const CustomCard = ({
       <div className="mt-2">
         <Tag className=" px-2 py-1 rounded-full border-0">{post.community}</Tag>
       </div>
-      <div className="text-black ">
+      <div
+        className="text-black cursor-pointer"
+        onClick={() => {
+          router.push(`/post/${post.id}`);
+        }}
+      >
         <p className="font-bold text-[16px] mt-2">
           {highlightText(post.title)}
         </p>
