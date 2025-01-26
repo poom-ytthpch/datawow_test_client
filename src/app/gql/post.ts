@@ -43,16 +43,6 @@ export const PostQuery = gql`
       createdAt
       content
       community
-      comments {
-        id
-        content
-        author {
-          id
-          image
-          username
-        }
-        createdAt
-      }
       comment_count
       author {
         id
@@ -67,22 +57,9 @@ export const CreateCommentMutation = gql`
   mutation CreateComment($input: CreateCommentInput!) {
     createComment(input: $input) {
       id
-      title
       updatedAt
       createdAt
       content
-      community
-      comments {
-        id
-        content
-        author {
-          id
-          image
-          username
-        }
-        createdAt
-      }
-      comment_count
       author {
         id
         image
@@ -165,6 +142,21 @@ export const DeletePostMutation = gql`
         id
         image
         username
+      }
+    }
+  }
+`;
+
+export const CommentsByPostIdQuery = gql`
+  query CommentsByPostId($id: Int!) {
+    commentsByPostId(id: $id) {
+      content
+      id
+      createdAt
+      author {
+        id
+        username
+        image
       }
     }
   }

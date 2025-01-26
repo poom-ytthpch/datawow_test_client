@@ -1,6 +1,5 @@
 import { CreateCommentMutation } from "@/app/gql";
 import { useAppSelector } from "@/store/store";
-import { Post } from "@/types";
 import { useMutation } from "@apollo/client";
 import { Alert, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -8,7 +7,7 @@ import TextArea from "antd/es/input/TextArea";
 type Props = {
   postId: string;
   handleCloseForm: () => void;
-  handleSetPost: (post: Post) => void;
+  handleGetComments: () => void;
 };
 
 type FieldType = {
@@ -17,15 +16,15 @@ type FieldType = {
 const CreateComentForm = ({
   postId,
   handleCloseForm,
-  handleSetPost,
+  handleGetComments,
 }: Props) => {
   const [form] = Form.useForm<FieldType>();
   const user = useAppSelector((state) => state.signin);
 
   const [createComment] = useMutation(CreateCommentMutation, {
-    onCompleted: async (data) => {
+    onCompleted: async () => {
       await form.resetFields();
-      await handleSetPost(data?.createComment);
+      await handleGetComments();
       await handleCloseForm();
     },
     onError: (error) => {
@@ -52,7 +51,7 @@ const CreateComentForm = ({
       <div className="mt-4 w-full md:flex justify-end items-center">
         <button
           className="text-[#49A569] rounded border border-[#49A569] sm:w-full sm:h-[40px] md:w-[105]"
-            onClick={() => handleCloseForm()}
+          onClick={() => handleCloseForm()}
           type="button"
         >
           Cancel

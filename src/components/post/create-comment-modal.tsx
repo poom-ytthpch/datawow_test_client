@@ -1,7 +1,6 @@
 "use client";
 import { CreateCommentMutation } from "@/app/gql";
 import { useAppSelector } from "@/store/store";
-import { Post } from "@/types";
 import { useMutation } from "@apollo/client";
 import { Alert, Form, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -10,7 +9,7 @@ type Props = {
   open: boolean;
   postId: string;
   handleCloseModal: () => void;
-  handleSetPost: (post: Post) => void;
+  handleGetComments: () => void;
 };
 
 type FieldType = {
@@ -20,16 +19,16 @@ const CreateCommentModal = ({
   open,
   postId,
   handleCloseModal,
-  handleSetPost,
+  handleGetComments,
 }: Props) => {
   const user = useAppSelector((state) => state.signin);
 
   const [form] = Form.useForm<FieldType>();
 
   const [createComment] = useMutation(CreateCommentMutation, {
-    onCompleted: async (data) => {
+    onCompleted: async () => {
       await form.resetFields();
-      await handleSetPost(data?.createComment);
+      await handleGetComments();
       await handleCloseModal();
     },
     onError: (error) => {

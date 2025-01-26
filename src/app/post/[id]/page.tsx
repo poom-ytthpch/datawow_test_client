@@ -1,5 +1,5 @@
 "use client";
-import { PostQuery } from "@/app/gql";
+import { CommentsByPostIdQuery, PostQuery } from "@/app/gql";
 import DefaultLayouts from "@/components/default/default-layouts";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useLazyQuery } from "@apollo/client";
@@ -19,8 +19,12 @@ const PostPage = () => {
   const router = useRouter();
 
   const [getPost, { loading }] = useLazyQuery(PostQuery);
+  const [getComments, { loading: commentLoading }] = useLazyQuery(
+    CommentsByPostIdQuery
+  );
 
   const [post, setPosts] = useState<Post>();
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const [openModal, setOpenmodal] = useState(false);
 
@@ -31,10 +35,10 @@ const PostPage = () => {
     await setPosts(res.data.post);
   };
 
-  const handleSetPost = (Post: Post) => {
-    setPosts(Post);
+  const handleGetComments = async () => {
+    const res = await getComments({ variables: { id: Number(id) } });
+    await setComments(res.data.commentsByPostId);
   };
-
   const handleCloseModal = () => {
     setOpenmodal(false);
   };
@@ -45,7 +49,8 @@ const PostPage = () => {
 
   useEffect(() => {
     handleGetPost();
-  },[]);
+    handleGetComments();
+  }, []);
 
   return (
     <DefaultLayouts>
@@ -137,23 +142,27 @@ const PostPage = () => {
                   <CreateComentForm
                     postId={id}
                     handleCloseForm={handleCloseForm}
-                    handleSetPost={handleSetPost}
+                    handleGetComments={handleGetComments}
                   />
                 </div>
               )}
             </div>
 
             <div className="mt-6">
-              {post?.comments?.map((comment: Comment) => (
-                <CommentCard comment={comment} key={comment.id} />
-              ))}
+              {commentLoading ? (
+                <Skeleton active />
+              ) : (
+                comments?.map((comment: Comment) => (
+                  <CommentCard comment={comment} key={comment.id} />
+                ))
+              )}
             </div>
           </div>
           <CreateCommentModal
             open={openModal}
             postId={id}
             handleCloseModal={handleCloseModal}
-            handleSetPost={handleSetPost}
+            handleGetComments={handleGetComments}
           />
         </ConfigProvider>
       )}
